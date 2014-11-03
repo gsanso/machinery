@@ -46,9 +46,10 @@ class LocalSystem < System
       end
 
       if !os || !os.can_run_machinery?
+        supported_oses = Os.descendants.select { |e| e.new.can_run_machinery? }
+        os_list = supported_oses.map { |e| e.new.name }.join(", ")
         message = "Running Machinery is not supported on this system.\n" \
-          "Check the 'Installation' section in the README.md for more information " \
-          "about the requirements."
+          "Supported operating systems are: #{os_list}"
 
         raise(Machinery::Errors::IncompatibleHost.new(message))
       end
