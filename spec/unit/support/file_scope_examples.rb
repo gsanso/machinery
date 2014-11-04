@@ -52,5 +52,18 @@ shared_examples "FileScope" do
         scope_class.new(files: Machinery::Array.new([2]))
       ])
     end
+
+    it "raises an error when there is an unknown attribute" do
+      a = scope_class.new(
+        foo: 1
+      )
+      b = scope_class.new(
+        foo: 1
+      )
+
+      expect {
+        a.compare_with(b)
+      }.to raise_error(Machinery::Errors::MachineryError, /attributes.*foo/)
+    end
   end
 end

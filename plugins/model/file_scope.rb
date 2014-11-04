@@ -17,6 +17,8 @@
 
 class FileScope < Machinery::Object
   def compare_with(other)
+    validate_attributes(other)
+
     only_self = new_instance
     only_other = new_instance
     shared = new_instance
@@ -34,6 +36,19 @@ class FileScope < Machinery::Object
 
   def new_instance
     self.class.new
+  end
+
+  def validate_attributes(other)
+    expected_attributes = [:extracted, :files]
+    actual_attributes = (attributes.keys + other.attributes.keys).uniq.sort
+
+    if actual_attributes != expected_attributes
+      unsupported = actual_attributes - expected_attributes
+      raise Machinery::Errors::MachineryError.new(
+        "The following attributes are not covered by FileScope#compare_with: " +
+          unsupported.join(", ")
+      )
+    end
   end
 
   def compare_extracted(other, only_self, only_other, shared)
