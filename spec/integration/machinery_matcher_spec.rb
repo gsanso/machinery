@@ -20,7 +20,6 @@ require_relative "integration_spec_helper"
 describe "match_machinery_show_scope matcher" do
   it "matches correct show output" do
     expected_output = <<-EOT
-    foo
 # Services [192.168.122.238] (2014-05-02 13:35:46)
 
   - arpd not active
