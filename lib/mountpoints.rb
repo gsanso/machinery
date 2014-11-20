@@ -41,7 +41,7 @@ class MountPoints
   end
 
   def special
-    @mounts.select { |fs_file, fs_vfstype| special_fs?(fs_vfstype) }.keys
+    @mounts.select { |_fs_file, fs_vfstype| special_fs?(fs_vfstype) }.keys
   end
 
   def remote
