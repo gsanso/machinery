@@ -24,6 +24,9 @@
 # remote()  returns an array containing the mount points of all mounted
 #           file systems that are remote file systems (e.g. nfs, cifs)
 #
+# special() returns an array containing the mount points of all mounted
+#            special file systems, e.g. /proc
+#
 # local()   returns an array containing the mount points of all mounted
 #           local file systems with permanent data (e.g. ext3, btrfs, xfs)
 
@@ -31,9 +34,14 @@
 class MountPoints
   attr_reader :mounts
   REMOTE_FILE_SYSTEMS = ["autofs", "cifs", "nfs", "nfs4"]
+  SPECIAL_FILE_SYSTEMS = ["proc", "sysfs", "devtmpfs", "tmpfs"]
   LOCAL_FILE_SYSTEMS  = ["ext2", "ext3", "ext4", "reiserfs", "btrfs", "vfat", "xfs", "jfs"]
   def initialize(system)
     @mounts = parse_mounts(system.read_file("/proc/mounts"))
+  end
+
+  def special
+    @mounts.select { |fs_file,fs_vfstype| special_fs?(fs_vfstype) }.keys
   end
 
   def remote
@@ -60,6 +68,10 @@ class MountPoints
       mounts[fs_file] = fs_vfstype
     end
     mounts
+  end
+
+  def special_fs?(fs)
+    SPECIAL_FILE_SYSTEMS.include?(fs)
   end
 
   def remote_fs?(fs)
