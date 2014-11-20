@@ -41,15 +41,15 @@ class MountPoints
   end
 
   def special
-    @mounts.select { |fs_file,fs_vfstype| special_fs?(fs_vfstype) }.keys
+    @mounts.select { |fs_file, fs_vfstype| special_fs?(fs_vfstype) }.keys
   end
 
   def remote
-    @mounts.select { |fs_file,fs_vfstype| remote_fs?(fs_vfstype) }.keys
+    @mounts.select { |_fs_file, fs_vfstype| remote_fs?(fs_vfstype) }.keys
   end
 
   def local
-    @mounts.select { |fs_file,fs_vfstype| local_fs?(fs_vfstype) }.keys
+    @mounts.select { |_fs_file, fs_vfstype| local_fs?(fs_vfstype) }.keys
   end
 
   def all
@@ -64,7 +64,7 @@ class MountPoints
     # we store the latest entry only, because that's the relevant one
     mounts = Hash.new
     proc_mounts.each_line do |line|
-      fs_spec, fs_file, fs_vfstype, fs_mntops, fs_freq, fs_passno = line.split(' ')
+      _fs_spec, fs_file, fs_vfstype, _fs_mntops, _fs_freq, _fs_passno = line.split(" ")
       mounts[fs_file] = fs_vfstype
     end
     mounts
