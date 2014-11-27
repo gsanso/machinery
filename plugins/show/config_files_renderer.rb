@@ -39,12 +39,14 @@ class ConfigFilesRenderer < Renderer
       files = @system_description["config_files"].files
       if files
         files.each do |p|
+          item_content = "#{p.name} (#{p.changes.join(", ")}, #{p.package_name}, " \
+            "v#{p.package_version})"
           if @options[:show_diffs] && p.changes.include?("md5")
-            item "#{p.name} (#{p.changes.join(", ")})" do
+            item item_content do
               render_diff_file(diffs_dir, p.name)
             end
           else
-            item ("#{p.name} (#{p.changes.join(", ")})")
+            item item_content
           end
         end
       end
